@@ -1,0 +1,25 @@
+.cart-wrapper {
+  width: 70%;
+  margin: 20px auto;
+}
+.cart-wrapper .cart-title {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #333;
+}
+.cart-wrapper .cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+.cart-wrapper .cart-item box- img {
+  min-width: 80px;
+  width: 80px;
+  margin-right: 10px;
+}
+.cart-wrapper .cart-item .cart-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
