@@ -7,11 +7,12 @@ import Products from './components/Products/Products';
 import Cart from './components/Cart/Cart';
 import data from './data.json'
 function App() {
+
   const [products, setproducts] = useState(data);
   const [FilteredProducts, setFilteredProducts] = useState(data);
   const [sort, setSort] = useState('');
   const [size, setSize] = useState('');
-  const [cartItems, setcartItems] = useState([])
+  const [cartItems, setcartItems] = useState(JSON.parse(localStorage.getItem('cartItems')) || [])
 
   const handlefilterBySize = (e) => {
     setSize(e.target.value);
@@ -39,12 +40,37 @@ function App() {
     })
     setFilteredProducts(newProducts)
   }
+  const addToCart = (propduct) => {
+    const cartItemsClone = [...cartItems]
+    let isPropductExist = false;
+    cartItemsClone.forEach(p => {
+      if (p.id == propduct.id) {
+        p.qty++;
+        isPropductExist = true
+      }
+    })
+    if (!isPropductExist) {
+      cartItemsClone.push({ ...propduct, qty: 1 })
+    }
+    setcartItems(cartItemsClone);
+  }
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems))
+
+  }, [cartItems])
+  
+  const removeFromCart = (propduct) => {
+    const cartItemsClone = [...cartItems]
+    setcartItems(cartItemsClone.filter(p => p.id != propduct.id))
+
+  }
+
   return (
     <div className="layout">
       <Header />
       <main>
         <div className="wrapper">
-          <Products products={FilteredProducts} />
+          <Products products={FilteredProducts} addToCart={addToCart} />
           <Filter
             handlefilterBySize={handlefilterBySize}
             size={size}
@@ -53,7 +79,7 @@ function App() {
             productNumber={FilteredProducts.length}
           />
         </div>
-        <Cart cartItems={cartItems} />
+        <Cart cartItems={cartItems} removeFromCart={removeFromCart} />
       </main>
       <Footer />
     </div>
